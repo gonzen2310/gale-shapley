@@ -1,6 +1,7 @@
 #include "FBullCowGameh.h"
 #include <map>
 
+// Make syntax Unreal friendly
 #define TMap std::map
 
 FBullCowGame::FBullCowGame(){Reset();}
