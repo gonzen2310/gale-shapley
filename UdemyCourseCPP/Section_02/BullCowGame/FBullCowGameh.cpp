@@ -1,5 +1,7 @@
 #include "FBullCowGameh.h"
 #include <map>
+#include <cstdlib>
+#include <ctime>
 
 // Make syntax Unreal friendly
 #define TMap std::map
@@ -22,9 +24,22 @@ int32 FBullCowGame::GetMaxTries() const {
 
 void FBullCowGame::Reset()
 {
-	const FString HIDDEN_WORD = "planet";
-	MyHiddenWord = HIDDEN_WORD;
+	// Generate new word every game
+	//==================================================
+	std::srand(std::time(0)); //use current time as seed for random generator
+	int32 First_idx = rand() % 4 + 1;
+	int32 Second_idx = rand() % 5 + 1;
 
+	const FString WordsDB[4][5] = {
+		{ "acid", "abed", "soap", "lion", "love" },
+		{ "realm", "kings", "light", "truck", "cream" },
+		{ "jawbox", "planet", "skrump", "chintz", "dwarfs" },
+		{ "stumped", "flyback", "whoring", "batfowl", "dumbing" }
+		};
+
+	const FString HIDDEN_WORD = WordsDB[First_idx][Second_idx];
+	MyHiddenWord = HIDDEN_WORD;
+	//====================================================
 	bGameIsWon = false;
 	MyCurrentTry = 1;
 	return;
