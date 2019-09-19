@@ -14,7 +14,7 @@ Run Program:
  	1. Install node and npm on your computer
   2. Install yarn
  	3. Navigate to ~/CSC321/Labs/Lab0/
-	4. Execute > yarn install
+	4. Type and run > yarn install
 	5. Run > node gs.js
 */
 
@@ -23,6 +23,7 @@ const _ = require("lodash");
 const readline = require('readline');
 const Queue = require("./queue");
 const { performance } = require('perf_hooks');
+
 
 class Person {
 	constructor(name) {
@@ -46,6 +47,7 @@ class Person {
 
 	set priorities(priorities) { this._priorities = priorities; }
 
+	// returns a stringified version of the list of priorities for this person
 	getPriorities() {
 		return _.join(this.priorities.map(priority => priority.name), " ");
 	}
@@ -65,6 +67,10 @@ class Man extends Person {
         this._currentIndex = index;
     }
 
+	/**
+		@param { Woman } partner
+		@summary enganges this man with a women (partner)
+	 */
 	engageToPartner(partner) {
 		this.isEngaged = true;
 		partner.isEngaged = true;
@@ -78,6 +84,10 @@ class Woman extends Person {
     super(name);
   }
 
+	/**
+		@param {currentSuitor, newSuitor}
+		@returns true if the new suitor has higher priority than the current partnet else rturns false
+	 */
 	prefersNewOverCurrent(currentSuitor, newSuitor) {
 		// Check if women prefers new suitor over current partner
 		if (
@@ -118,10 +128,13 @@ class GaleShapley {
 			new Woman("Ivy"),
 			new Woman("Jan")
 		];
-
+		// queue that stores all the free men
 		this.queueFreeMen = new Queue();
 	}
 
+	/**
+		@summary randomly sets the preferences for men and women using the Fisher-Yates shuffling algorithm
+	 */
 	setPreferences() {
 		for (let man of this.menNames) {
 			// Lodash shuffle method uses Fisher-Yates algorithms https://lodash.com/docs/4.17.15#shuffle
@@ -172,9 +185,9 @@ class GaleShapley {
 				}
 				// else woman rejects suitor and suitor remains free
 				else {
-					console.log(`${woman.name} rejected ${suitor.name}`);
 					this.queueFreeMen.enqueue(suitor);
 					suitor.currentIndex++;
+					console.log(`${woman.name} rejected ${suitor.name}`);
 				}
 			}
 		}
@@ -192,39 +205,48 @@ class GaleShapley {
 		// print randomly generated preferences
 		console.log("\nPreferences:");
 		this.setPreferences();
-        // execute Gale Shapley algorithm
-        console.log("\nStatus:");
+		// execute Gale Shapley algorithm
+		console.log("\nStatus:");
 		this.galeShapley();
-        // print stable pairs
-        console.log("\nPairing:");
+		// print stable pairs
+		console.log("\nPairing:");
 		for (let man of this.menNames)
 			console.log(man.name + " - " + man.partner.name);
 	}
 }
 
-const input = readline.createInterface(process.stdin, process.stdout);
-let gs = new GaleShapley();
-const t0 = performance.now();
-gs.run();
-const t1 = performance.now();
-console.log("\nElapsed CPU time: " + (t1 - t0) + " milliseconds.");
-console.log("Stable matchup\n");
+// main function
+function main() {
+	// accept user input
+	const input = readline.createInterface(process.stdin, process.stdout);
+	// create a new instance of the GaleShapley class
+	let gs = new GaleShapley();
+	const t0 = performance.now();
+	gs.run();
+	const t1 = performance.now();
+	console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
+	console.log("Stable matchup\n");
 
-input.setPrompt('Another trial? (y)es, (n)o ');
+	input.setPrompt('Another trial? (y)es, (n)o ');
 
-input.prompt();
-input.on('line', (line) =>  {
-    if (line === "no" || line === "n") {
-        console.log("Thank you for playing, Goodbye!");
-        input.close();
-    }
-    let gs = new GaleShapley();
-    const t0 = performance.now();
-    gs.run();
-    const t1 = performance.now();
-    console.log("\nElapsed CPU time: " + (t1 - t0) + " milliseconds.");
-    console.log("Stable matchup\n");
-    input.prompt();
-}).on('close', () => {
-    process.exit(0);
-});
+	input.prompt();
+	// Keep rerunning programming until user enter "no" or "n"
+	input.on('line', (line) =>  {
+			if (line === "no" || line === "n") {
+					console.log("Thank you for playing, Goodbye!");
+					input.close();
+			}
+			// create a new instance of the GaleShapley class
+			let gs = new GaleShapley();
+			const t0 = performance.now();
+			gs.run();
+			const t1 = performance.now();
+			console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
+			console.log("Stable matchup\n");
+			input.prompt();
+	}).on('close', () => {
+			process.exit(0);
+	});
+}
+
+main();
