@@ -1,4 +1,4 @@
-/** 
+/**
 Program Name: gs.py
 Created by: Gonzalo Eladio Reyes
 Date: 9/15/2019
@@ -29,44 +29,42 @@ class Person {
 		this._partner = null;
 	}
 
+	get name() { return this._name;	}
+
+	get isEngaged() { return this._isEngaged;	}
+
+	get partner() { return this._partner; }
+
+	get priorities() { return this._priorities; }
+
+	set isEngaged(status) { this._isEngaged = status; }
+
+	set partner(partner) { this._partner = partner; }
+
+	set priorities(priorities) { this._priorities = priorities; }
+
+	getPriorities() {
+		return _.join(this.priorities.map(priority => priority.name), " ");
+	}
+}
+
+class Man extends Person {
+  constructor(name) {
+    super(name);
+  }
+
 	engageToPartner(partner) {
 		this.isEngaged = true;
 		partner.isEngaged = true;
 		this.partner = partner;
 		partner.partner = this;
 	}
+}
 
-	get name() {
-		return this._name;
-	}
-
-	get priorities() {
-		return this._priorities;
-	}
-
-	get isEngaged() {
-		return this._isEngaged;
-	}
-
-	get partner() {
-		return this._partner;
-	}
-
-	set isEngaged(status) {
-		this._isEngaged = status;
-	}
-
-	set partner(partner) {
-		this._partner = partner;
-	}
-
-	set priorities(priorities) {
-		this._priorities = priorities;
-	}
-
-	getPriorities() {
-		return _.join(this.priorities.map(priority => priority.name), " ");
-	}
+class Woman extends Person {
+	constructor(name) {
+    super(name);
+  }
 
 	prefersNewOverCurrent(currentSuitor, newSuitor) {
 		// Check if women prefers new suitor over current partner
@@ -84,29 +82,29 @@ class GaleShapley {
 	constructor() {
 		// these are all the participants in the matching algorithm
 		this.menNames = [
-			new Person("Abe"),
-			new Person("Bob"),
-			new Person("Col"),
-			new Person("Dan"),
-			new Person("Ed"),
-			new Person("Fred"),
-			new Person("Gav"),
-			new Person("Hal"),
-			new Person("Ian"),
-			new Person("Jon")
+			new Man("Abe"),
+			new Man("Bob"),
+			new Man("Col"),
+			new Man("Dan"),
+			new Man("Ed"),
+			new Man("Fred"),
+			new Man("Gav"),
+			new Man("Hal"),
+			new Man("Ian"),
+			new Man("Jon")
 		];
 
 		this.womenNames = [
-			new Person("Abi"),
-			new Person("Bea"),
-			new Person("Cath"),
-			new Person("Dee"),
-			new Person("Eve"),
-			new Person("Fay"),
-			new Person("Gay"),
-			new Person("Hope"),
-			new Person("Ivy"),
-			new Person("Jan")
+			new Woman("Abi"),
+			new Woman("Bea"),
+			new Woman("Cath"),
+			new Woman("Dee"),
+			new Woman("Eve"),
+			new Woman("Fay"),
+			new Woman("Gay"),
+			new Woman("Hope"),
+			new Woman("Ivy"),
+			new Woman("Jan")
 		];
 
 		this.queueFreeMen = new Queue();
@@ -131,6 +129,7 @@ class GaleShapley {
 		while (!this.queueFreeMen.isEmpty()) {
 			let suitor = this.queueFreeMen.dequeue();
 			for (let woman of suitor.priorities) {
+                console.log(`${suitor.name} proposes to ${woman.name}`);
 				if (!woman.isEngaged) {
 					console.log(`${suitor.name} engaged to ${woman.name}`);
 					suitor.engageToPartner(woman);
@@ -149,40 +148,31 @@ class GaleShapley {
 					break;
 				} else {
 					console.log(`${woman.name} rejected ${suitor.name}`);
-					this.queueFreeMen.enqueue(suitor);
-					break;
 				}
 			}
-			/*
-			Choose such a man m
-			w = 1st woman on m's list to whom m has not yet proposed
-			if (w is free)
-				assign m and w to be engaged
-			else if (w prefers m to her fiancé m')
-				assign m and w to be engaged, and m' to be free
-			else
-				w rejects m
-			*/
 		}
 	}
 
 	run() {
 		// print list of participants
 		console.log("Participants:");
-
 		console.log(_.join(this.menNames.map(man => man.name), " "));
 		console.log(_.join(this.womenNames.map(woman => woman.name), " "));
-		console.log();
 		// print randomly generated preferences
-		console.log("Preferences:");
+		console.log("\nPreferences:");
 		this.setPreferences();
+        // execute Gale Shapley algorithm
+        console.log("\nStatus:");
 		this.galeShapley();
-
+        // print stable pairs
+        console.log("\nPairing:");
 		for (let man of this.menNames) {
 			console.log(man.name + " - " + man.partner.name);
 		}
 	}
 }
 
+
 let gs = new GaleShapley();
 gs.run();
+console.log("\nStable mathcup");
