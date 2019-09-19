@@ -1,2 +1,0 @@
-# LearnCPP
-Learn C++ programming
