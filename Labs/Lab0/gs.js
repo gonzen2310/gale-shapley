@@ -12,10 +12,10 @@ OUTPUT(S):
 	5. Ask to rerun program
 Run Program:
  	1. Install node and npm on your computer
-  2. Install yarn
+    2. Install yarn
  	3. Navigate to ~/CSC321/Labs/Lab0/
 	4. Type and run > yarn install
-	5. Run > node gs.js
+	5. Run > node gs.js (If you need help running this program please email me at: greye003@plattsburgh.edu)
 */
 
 // Import modules
@@ -23,7 +23,6 @@ const _ = require("lodash");
 const readline = require('readline');
 const Queue = require("./queue");
 const { performance } = require('perf_hooks');
-
 
 class Person {
 	constructor(name) {
@@ -33,18 +32,25 @@ class Person {
 		this._partner = null;
 	}
 
+  // return person name
 	get name() { return this._name;	}
 
+  // return whether a person is engaged or no
 	get isEngaged() { return this._isEngaged;	}
 
+  // return person partnet
 	get partner() { return this._partner; }
 
+  // return person list of preferences
 	get priorities() { return this._priorities; }
 
+  // set engagements status
 	set isEngaged(status) { this._isEngaged = status; }
 
+  // set partner for person
 	set partner(partner) { this._partner = partner; }
 
+  // set priorities for person
 	set priorities(priorities) { this._priorities = priorities; }
 
 	// returns a stringified version of the list of priorities for this person
@@ -85,8 +91,9 @@ class Woman extends Person {
   }
 
 	/**
-		@param {currentSuitor, newSuitor}
-		@returns true if the new suitor has higher priority than the current partnet else rturns false
+		@param { Man } currentSuitor
+		@param { Man } newSuitor
+		@returns { boolean } true if the new suitor has higher priority than the current partnet else rturns false
 	 */
 	prefersNewOverCurrent(currentSuitor, newSuitor) {
 		// Check if women prefers new suitor over current partner
@@ -137,7 +144,7 @@ class GaleShapley {
 	 */
 	setPreferences() {
 		for (let man of this.menNames) {
-			// Lodash shuffle method uses Fisher-Yates algorithms https://lodash.com/docs/4.17.15#shuffle
+			// Lodash shuffle method uses Fisher-Yates algorithm https://lodash.com/docs/4.17.15#shuffle
 			let preferences = _.shuffle(this.womenNames);
 			man.priorities = preferences;
 			this.queueFreeMen.enqueue(man);
@@ -195,7 +202,7 @@ class GaleShapley {
 
 	 /**
 	 	* @param none
-		* Runs an instances of the Gale-shapley algorithm
+		* Runs an instance of the Gale-shapley algorithm
 		*/
 	run() {
 		// print list of participants
@@ -230,7 +237,7 @@ function main() {
 	input.setPrompt('Another trial? (y)es, (n)o ');
 
 	input.prompt();
-	// Keep rerunning programming until user enter "no" or "n"
+	// Keep rerunning program until user enter "no" or "n"
 	input.on('line', (line) =>  {
 			if (line === "no" || line === "n") {
 					console.log("Thank you for playing, Goodbye!");

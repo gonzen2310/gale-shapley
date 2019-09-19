@@ -1,12 +1,12 @@
 const join = require("lodash/join");
 
+// Custom Queue data structure
 class Queue {
 	constructor() {
 		this.items = [];
 	}
 
 	enqueue(element) {
-		// adding element to the queue
 		this.items.push(element);
 	}
 
