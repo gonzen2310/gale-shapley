@@ -1,0 +1,13 @@
+{
+  "name": "Lab0",
+  "version": "1.0.0",
+  "description": "Gale Shapley implementation",
+  "main": "gs.js",
+  "author": "Gonzalo Reyes",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "yarn": "^1.17.3"
+  }
+}
