@@ -2,39 +2,20 @@ const _ = require("lodash");
 const readline = require('readline');
 const Stack = require("./stack");
 const { performance } = require('perf_hooks');
-
-const {Man, Woman} = require("./gs");
-
-
-function main() {
-    const arg = process.argv.slice(2);
-    if (arg.length === 1)  {
-
-    } else {
-        console.log("Invalid Command line argument");
-    }
-
-}
-
-
-
-
-
-
-
+const Participant = require("./participants");
 
 class GaleShapley {
-    constructor() {
-        this.menNames = new Array(Number(arg[0]));
-        this.womenNames = new Array(Number(arg[0]));
+    constructor(participants) {
+        this.menNames = new Array(participants);
+        this.womenNames = new Array(participants);
         for(let i = 0; i < this.menNames.length; i++) {
-            this.menNames[i] = new Man(i);
+            this.menNames[i] = new Participant.Man(i);
         }
         for(let i = 0; i < this.womenNames.length; i++) {
-            this.womenNames[i] = new Woman(i);
+            this.womenNames[i] = new Participant.Woman(i);
         }
         // queue that stores all the free men
-        this.queueFreeMen = new Queue();
+        this.stackFreeMen = new Stack();
     }
 
     setPreferences() {
@@ -42,7 +23,7 @@ class GaleShapley {
             // Lodash shuffle method uses Fisher-Yates algorithm https://lodash.com/docs/4.17.15#shuffle
             let preferences = _.shuffle(this.womenNames);
             man.priorities = preferences;
-            this.queueFreeMen.enqueue(man);
+            this.stackFreeMen.push(man);
         }
         for (let woman of this.womenNames) {
             let preferences = _.shuffle(this.menNames);
@@ -51,11 +32,12 @@ class GaleShapley {
     }
 
     galeShapley() {
+        this.stackFreeMen.reverseStack();
         // initially all m ∈ Men and w ∈ Women are free
         // while there is a man m who is free and hasn’t proposed keep pairing
-        while (!this.queueFreeMen.isEmpty()) {
+        while (!this.stackFreeMen.isEmpty()) {
             // choose a man from the queue
-            let suitor = this.queueFreeMen.dequeue();
+            let suitor = this.stackFreeMen.pop();
             // highest-ranked woman in suitor's preference list to whom suitor has not yet proposed
             let woman = suitor.priorities[suitor.currentIndex];
             // if woman is free then (suitor, woman) become engaged
@@ -71,13 +53,13 @@ class GaleShapley {
                     let currentPartner = woman.partner;
                     currentPartner.isEngaged = false;
                     currentPartner.partner = null;
-                    this.queueFreeMen.enqueue(currentPartner);
+                    this.stackFreeMen.push(currentPartner);
                     suitor.engageToPartner(woman);
                     suitor.currentIndex++;
                 }
                 // else woman rejects suitor and suitor remains free
                 else {
-                    this.queueFreeMen.enqueue(suitor);
+                    this.stackFreeMen.push(suitor);
                     suitor.currentIndex++;
                 }
             }
@@ -85,14 +67,18 @@ class GaleShapley {
     }
 }
 
-    let test = new GaleShapley();
-    const t0 = performance.now();
-    // console.log("Participants:");
-    // console.log(_.join(test.menNames.map(man => man.name), " "));
-    // console.log(_.join(test.womenNames.map(woman => woman.name), " "));
-    // print randomly generated preferences
-    test.setPreferences();
-    test.galeShapley();
-    const t1 = performance.now();
-    console.log(arg[0], "\nElapsed time: " + (t1 - t0) + " milliseconds.");
+function main() {
+    const arg = process.argv.slice(2);
+    if (arg.length === 1 && !Number.isNaN(arg[0]))  {
+        let gs = new GaleShapley(Number(arg[0]));
+        const t0 = performance.now();
+        gs.setPreferences();
+        gs.galeShapley();
+        const t1 = performance.now();
+        console.log(`${arg[0]} ${(t1 - t0)}`);
+    } else {
+        console.log("Invalid Command line argument");
+    }
+}
 
+main();

@@ -23,117 +23,35 @@ const _ = require("lodash");
 const readline = require('readline');
 const Stack = require("./stack");
 const { performance } = require('perf_hooks');
-
-class Person {
-	constructor(name) {
-		this._name = name;
-		this._priorities = [];
-		this._isEngaged = false;
-		this._partner = null;
-	}
-
-  // return person name
-	get name() { return this._name;	}
-
-  // return whether a person is engaged or no
-	get isEngaged() { return this._isEngaged;	}
-
-  // return person partnet
-	get partner() { return this._partner; }
-
-  // return person list of preferences
-	get priorities() { return this._priorities; }
-
-  // set engagements status
-	set isEngaged(status) { this._isEngaged = status; }
-
-  // set partner for person
-	set partner(partner) { this._partner = partner; }
-
-  // set priorities for person
-	set priorities(priorities) { this._priorities = priorities; }
-
-	// returns a stringified version of the list of priorities for this person
-	getPriorities() {
-		return _.join(this.priorities.map(priority => priority.name), " ");
-	}
-}
-
-class Man extends Person {
-  constructor(name) {
-    super(name);
-    this._currentIndex = 0;
-  }
-
-    get currentIndex() {
-        return this._currentIndex;
-    }
-
-    set currentIndex(index) {
-        this._currentIndex = index;
-    }
-
-	/**
-		@param { Woman } partner
-		@summary enganges this man with a women (partner)
-	 */
-	engageToPartner(partner) {
-		this.isEngaged = true;
-		partner.isEngaged = true;
-		this.partner = partner;
-		partner.partner = this;
-	}
-}
-
-class Woman extends Person {
-	constructor(name) {
-    super(name);
-  }
-
-	/**
-		@param { Man } currentSuitor
-		@param { Man } newSuitor
-		@returns { boolean } true if the new suitor has higher priority than the current partnet else rturns false
-	 */
-	prefersNewOverCurrent(currentSuitor, newSuitor) {
-		// Check if women prefers new suitor over current partner
-		if (
-			_.indexOf(this.priorities, currentSuitor) >
-			_.indexOf(this.priorities, newSuitor)
-		) {
-			return true;
-		}
-		return false;
-	}
-}
+const Participant = require('./participants');
 
 class GaleShapley {
 	constructor() {
 		// these are all the participants in the matching algorithm
 		this.menNames = [
-			new Man("Abe"),
-			new Man("Bob"),
-			new Man("Col"),
-			new Man("Dan"),
-			new Man("Ed"),
-			new Man("Fred"),
-			new Man("Gav"),
-			new Man("Hal"),
-			new Man("Ian"),
-			new Man("Jon")
+			new Participant.Man("Abe"),
+			new Participant.Man("Bob"),
+			new Participant.Man("Col"),
+			new Participant.Man("Dan"),
+			new Participant.Man("Ed"),
+			new Participant.Man("Fred"),
+			new Participant.Man("Gav"),
+			new Participant.Man("Hal"),
+			new Participant.Man("Ian"),
+			new Participant.Man("Jon")
 		];
 
 		this.womenNames = [
-			new Woman("Abi"),
-			new Woman("Bea"),
-			new Woman("Cath"),
-			new Woman("Dee"),
-			new Woman("Eve"),
-			new Woman("Fay"),
-			new Woman("Gay"),
-			new Woman("Hope"),
-			new Woman("Ivy"),
-			new Woman("Jan")
+			new Participant.Woman("Abi"),
+			new Participant.Woman("Bea"),
+			new Participant.Woman("Cath"),
+			new Participant.Woman("Dee"),
+			new Participant.Woman("Eve"),
+			new Participant.Woman("Fay"),
+			new Participant.Woman("Gay"),
+			new Participant.Woman("Hope"),
+			new Participant.Woman("Ivy"),
+			new Participant.Woman("Jan")
 		];
 		// queue that stores all the free men
 		this.stackFreeMen = new Stack();
@@ -258,5 +176,3 @@ function main() {
 }
 
 main();
-
-module.exports = { Man, Woman };
