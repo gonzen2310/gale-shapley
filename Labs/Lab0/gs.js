@@ -20,10 +20,10 @@ Run Program:
 
 // Import modules
 const _ = require("lodash");
-const readline = require('readline');
+const readline = require("readline");
 const Stack = require("./stack");
-const { performance } = require('perf_hooks');
-const Participant = require('./participants');
+const { performance } = require("perf_hooks");
+const Participant = require("./participants");
 
 class GaleShapley {
 	constructor() {
@@ -76,11 +76,11 @@ class GaleShapley {
 	}
 
 	/**
-	 	* @param none
-		* actual implementation of the gale-shapley algorithm
-		*/
+	 * @param none
+	 * actual implementation of the gale-shapley algorithm
+	 */
 	galeShapley() {
-        this.stackFreeMen.reverseStack();
+		this.stackFreeMen.reverseStack();
 		// initially all m ∈ Men and w ∈ Women are free
 		// while there is a man m who is free and hasn’t proposed keep pairing
 		while (!this.stackFreeMen.isEmpty()) {
@@ -119,10 +119,10 @@ class GaleShapley {
 		}
 	}
 
-	 /**
-	 	* @param none
-		* Runs an instance of the Gale-shapley algorithm
-		*/
+	/**
+	 * @param none
+	 * Runs an instance of the Gale-shapley algorithm
+	 */
 	run() {
 		// print list of participants
 		console.log("Participants:");
@@ -153,14 +153,15 @@ function main() {
 	console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
 	console.log("Stable matchup\n");
 
-	input.setPrompt('Another trial? (y)es, (n)o ');
+	input.setPrompt("Another trial? (y)es, (n)o ");
 
 	input.prompt();
 	// Keep rerunning program until user enter "no" or "n"
-	input.on('line', (line) =>  {
+	input
+		.on("line", line => {
 			if (line === "no" || line === "n") {
-					console.log("Thank you for playing, Goodbye!");
-					input.close();
+				console.log("Thank you for playing, Goodbye!");
+				input.close();
 			}
 			// create a new instance of the GaleShapley class
 			let gs = new GaleShapley();
@@ -170,9 +171,10 @@ function main() {
 			console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
 			console.log("Stable matchup\n");
 			input.prompt();
-	}).on('close', () => {
+		})
+		.on("close", () => {
 			process.exit(0);
-	});
+		});
 }
 
 main();

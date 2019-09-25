@@ -9,26 +9,40 @@ class Person {
 		this._partner = null;
 	}
 
-  // return person name
-	get name() { return this._name;	}
+	// return person name
+	get name() {
+		return this._name;
+	}
 
-  // return whether a person is engaged or no
-	get isEngaged() { return this._isEngaged;	}
+	// return whether a person is engaged or no
+	get isEngaged() {
+		return this._isEngaged;
+	}
 
-  // return person partnet
-	get partner() { return this._partner; }
+	// return person partnet
+	get partner() {
+		return this._partner;
+	}
 
-  // return person list of preferences
-	get priorities() { return this._priorities; }
+	// return person list of preferences
+	get priorities() {
+		return this._priorities;
+	}
 
-  // set engagements status
-	set isEngaged(status) { this._isEngaged = status; }
+	// set engagements status
+	set isEngaged(status) {
+		this._isEngaged = status;
+	}
 
-  // set partner for person
-	set partner(partner) { this._partner = partner; }
+	// set partner for person
+	set partner(partner) {
+		this._partner = partner;
+	}
 
-  // set priorities for person
-	set priorities(priorities) { this._priorities = priorities; }
+	// set priorities for person
+	set priorities(priorities) {
+		this._priorities = priorities;
+	}
 
 	// returns a stringified version of the list of priorities for this person
 	getPriorities() {
@@ -37,18 +51,18 @@ class Person {
 }
 
 class Man extends Person {
-  constructor(name) {
-    super(name);
-    this._currentIndex = 0;
-  }
+	constructor(name) {
+		super(name);
+		this._currentIndex = 0;
+	}
 
-    get currentIndex() {
-        return this._currentIndex;
-    }
+	get currentIndex() {
+		return this._currentIndex;
+	}
 
-    set currentIndex(index) {
-        this._currentIndex = index;
-    }
+	set currentIndex(index) {
+		this._currentIndex = index;
+	}
 
 	/**
 		@param { Woman } partner
@@ -64,8 +78,8 @@ class Man extends Person {
 
 class Woman extends Person {
 	constructor(name) {
-    super(name);
-  }
+		super(name);
+	}
 
 	/**
 		@param { Man } currentSuitor
