@@ -11,8 +11,8 @@ OUTPUT(S):
  	4. Execution Time
 	5. Ask to rerun program
 Run Program:
- 	1. Install node and npm on your computer
-    2. Install yarn
+ 	1. Install node and npm on your computer (https://nodejs.org/en/download/)
+    2. Install yarn (https://yarnpkg.com/lang/en/docs/install/#debian-stable)
  	3. Navigate to ~/CSC321/Labs/Lab0/
 	4. Type and run > yarn install
 	5. Run > node gs.js (If you need help running this program please email me at: greye003@plattsburgh.edu)
@@ -21,7 +21,7 @@ Run Program:
 // Import modules
 const _ = require("lodash");
 const readline = require('readline');
-const Queue = require("./queue");
+const Stack = require("./stack");
 const { performance } = require('perf_hooks');
 
 class Person {
@@ -136,7 +136,7 @@ class GaleShapley {
 			new Woman("Jan")
 		];
 		// queue that stores all the free men
-		this.queueFreeMen = new Queue();
+		this.stackFreeMen = new Stack();
 	}
 
 	/**
@@ -147,7 +147,7 @@ class GaleShapley {
 			// Lodash shuffle method uses Fisher-Yates algorithm https://lodash.com/docs/4.17.15#shuffle
 			let preferences = _.shuffle(this.womenNames);
 			man.priorities = preferences;
-			this.queueFreeMen.enqueue(man);
+			this.stackFreeMen.push(man);
 			console.log(man.name, "\t:", man.getPriorities());
 		}
 		for (let woman of this.womenNames) {
@@ -162,11 +162,12 @@ class GaleShapley {
 		* actual implementation of the gale-shapley algorithm
 		*/
 	galeShapley() {
+        this.stackFreeMen.reverseStack();
 		// initially all m ∈ Men and w ∈ Women are free
 		// while there is a man m who is free and hasn’t proposed keep pairing
-		while (!this.queueFreeMen.isEmpty()) {
+		while (!this.stackFreeMen.isEmpty()) {
 			// choose a man from the queue
-			let suitor = this.queueFreeMen.dequeue();
+			let suitor = this.stackFreeMen.pop();
 			// highest-ranked woman in suitor's preference list to whom suitor has not yet proposed
 			let woman = suitor.priorities[suitor.currentIndex];
 			console.log(`${suitor.name} proposes to ${woman.name}`);
@@ -185,14 +186,14 @@ class GaleShapley {
 					console.log(`${woman.name} dumped ${currentPartner.name}`);
 					currentPartner.isEngaged = false;
 					currentPartner.partner = null;
-					this.queueFreeMen.enqueue(currentPartner);
+					this.stackFreeMen.push(currentPartner);
 					suitor.engageToPartner(woman);
 					suitor.currentIndex++;
 					console.log(`${suitor.name} engaged to ${woman.name}`);
 				}
 				// else woman rejects suitor and suitor remains free
 				else {
-					this.queueFreeMen.enqueue(suitor);
+					this.stackFreeMen.push(suitor);
 					suitor.currentIndex++;
 					console.log(`${woman.name} rejected ${suitor.name}`);
 				}
@@ -257,3 +258,5 @@ function main() {
 }
 
 main();
+
+module.exports = { Man, Woman };
