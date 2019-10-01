@@ -150,7 +150,7 @@ function main() {
 	const t0 = performance.now();
 	gs.run();
 	const t1 = performance.now();
-	console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
+	console.log(`\nElapsed time: ${((t1 - t0) / 1000).toFixed(5)} seconds.`);
 	console.log("Stable matchup\n");
 
 	input.setPrompt("Another trial? (y)es, (n)o ");
@@ -168,7 +168,7 @@ function main() {
 			const t0 = performance.now();
 			gs.run();
 			const t1 = performance.now();
-			console.log("\nElapsed time: " + (t1 - t0) + " milliseconds.");
+			console.log(`\nElapsed time: ${((t1 - t0) / 1000).toFixed(5)} seconds.`);
 			console.log("Stable matchup\n");
 			input.prompt();
 		})

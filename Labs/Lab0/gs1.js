@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const readline = require("readline");
 const Stack = require("./stack");
 const { performance } = require("perf_hooks");
 const Participant = require("./participants");
@@ -75,7 +74,7 @@ function main() {
 		gs.setPreferences();
 		gs.galeShapley();
 		const t1 = performance.now();
-		console.log(`${arg[0]} ${t1 - t0}`);
+		console.log(`${arg[0]} ${((t1 - t0) / 1000).toFixed(5)}`);
 	} else {
 		console.log("Invalid Command line argument");
 	}
