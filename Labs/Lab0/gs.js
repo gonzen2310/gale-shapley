@@ -128,6 +128,9 @@ class GaleShapley {
 	 * Runs an instance of the Gale-shapley algorithm
 	 */
 	run() {
+		const startUsage = process.cpuUsage();
+		console.time("Elapsed wall clock time");
+
 		// print list of participants
 		console.log("Participants:");
 		console.log(_.join(this.menNames.map(man => man.name), " "));
@@ -142,6 +145,14 @@ class GaleShapley {
 		console.log("\nPairing:");
 		for (let man of this.menNames)
 			console.log(man.name + " - " + man.partner.name);
+		console.log();
+		// Log the time taken
+		console.timeEnd("Elapsed wall clock time");
+		console.log(
+			"Elapsed CPU time: " +
+				(process.cpuUsage(startUsage)["user"] / 1000000).toFixed(6)
+		);
+		console.log("Stable matchup\n");
 	}
 }
 
@@ -151,12 +162,7 @@ function main() {
 	const input = readline.createInterface(process.stdin, process.stdout);
 	// create a new instance of the GaleShapley class
 	let gs = new GaleShapley();
-	const t0 = performance.now();
 	gs.run();
-	const t1 = performance.now();
-	console.log(`\nElapsed time: ${((t1 - t0) / 1000).toFixed(5)} seconds.`);
-	console.log("Stable matchup\n");
-
 	input.setPrompt("Another trial? (y)es, (n)o ");
 
 	input.prompt();
@@ -169,11 +175,7 @@ function main() {
 			}
 			// create a new instance of the GaleShapley class
 			let gs = new GaleShapley();
-			const t0 = performance.now();
 			gs.run();
-			const t1 = performance.now();
-			console.log(`\nElapsed time: ${((t1 - t0) / 1000).toFixed(5)} seconds.`);
-			console.log("Stable matchup\n");
 			input.prompt();
 		})
 		.on("close", () => {
