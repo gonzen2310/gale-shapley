@@ -23,7 +23,6 @@ Run Program:
 const _ = require("lodash");
 const readline = require("readline");
 const Stack = require("./stack");
-const { performance } = require("perf_hooks");
 const Participant = require("./participants");
 
 class GaleShapley {
