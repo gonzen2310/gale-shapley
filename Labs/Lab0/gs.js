@@ -15,7 +15,8 @@ Run Program:
     2. Install yarn (https://yarnpkg.com/lang/en/docs/install/#debian-stable)
  	3. Navigate to ~/CSC321/Labs/Lab0/
 	4. Type and run > yarn install
-	5. Run > node gs.js (If you need help running this program please email me at: greye003@plattsburgh.edu)
+	5. Run > node gs.js (If you need help running this program please 
+		email me at: greye003@plattsburgh.edu)
 */
 
 // Import modules
@@ -58,11 +59,13 @@ class GaleShapley {
 	}
 
 	/**
-		@summary randomly sets the preferences for men and women using the Fisher-Yates shuffling algorithm
+		@summary randomly sets the preferences for men and women using the 
+		Fisher-Yates shuffling algorithm
 	 */
 	setPreferences() {
 		for (let man of this.menNames) {
-			// Lodash shuffle method uses Fisher-Yates algorithm https://lodash.com/docs/4.17.15#shuffle
+			// Lodash shuffle method uses Fisher-Yates algorithm
+			// https://lodash.com/docs/4.17.15#shuffle
 			let preferences = _.shuffle(this.womenNames);
 			man.priorities = preferences;
 			this.stackFreeMen.push(man);
@@ -86,7 +89,8 @@ class GaleShapley {
 		while (!this.stackFreeMen.isEmpty()) {
 			// choose a man from the queue
 			let suitor = this.stackFreeMen.pop();
-			// highest-ranked woman in suitor's preference list to whom suitor has not yet proposed
+			// highest-ranked woman in suitor's preference list to whom
+			// suitor has not yet proposed
 			let woman = suitor.priorities[suitor.currentIndex];
 			console.log(`${suitor.name} proposes to ${woman.name}`);
 			// if woman is free then (suitor, woman) become engaged
